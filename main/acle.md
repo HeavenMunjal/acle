@@ -2537,6 +2537,31 @@ following:
 versioning mechanism described in this section is supported by the
 compiler and it is enabled.
 
+
+### Disabling Function Multi Versioning
+
+Function Multi Versioning (FMV) can be a powerful tool for optimizing software to run on various hardware configurations. However, there may be scenarios where a developer needs to disable this feature, such as for debugging purposes or to ensure compatibility with specific hardware that does not benefit from FMV.
+
+To disable FMV at compile time, the compiler provides a specific flag. This flag instructs the compiler not to generate multiple versions of a function based on the target attributes and to use only the `default` version of the function. The use of this flag ensures that the compiled binary does not contain any versioned functions other than the default.
+
+#### Compiler Flag
+
+The compiler flag to disable FMV is `-fno-function-multi-versioning`. This flag can be added to the compiler's command line arguments when compiling the source code.
+
+Example usage:
+
+```sh
+gcc -fno-function-multi-versioning -o my_program my_program.c
+```
+
+In this example, `gcc` is the compiler being used to compile `my_program.c`. By including the `-fno-function-multi-versioning` flag, FMV is disabled for this compilation, ensuring that only the default versions of any multi-versioned functions are included in the final binary.
+
+#### Considerations
+
+- When FMV is disabled using the `-fno-function-multi-versioning` flag, all `__attribute__((target_version("name")))` and `__attribute__((target_clones("name",...)))` attributes in the source code are ignored.
+- Developers should carefully consider the implications of disabling FMV, as it may impact the performance optimizations that FMV can provide on supported hardware.
+- It is recommended to use this flag only when necessary, such as during specific testing or debugging sessions, or when targeting hardware that does not support the features used by the versioned functions.
+
 ### Name mangling
 
 The `"default"` version is mangled with `".default"` on top of the
