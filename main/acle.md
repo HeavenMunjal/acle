@@ -2537,6 +2537,42 @@ following:
 versioning mechanism described in this section is supported by the
 compiler and it is enabled.
 
+### Documenting Compiler Support for FMV
+
+#### Checking for FMV Support
+
+To write portable code that optionally uses Function Multi Versioning (FMV) features, it's crucial to check whether the compiler supports FMV. This can be done by checking predefined macros that are set by the compiler when FMV is supported. The specific macro to check can vary based on the compiler and the target architecture.
+
+#### Predefined Macros for FMV Support
+
+The compiler may define one or more of the following macros to indicate support for FMV:
+
+- `__HAVE_FEATURE_MULTI_VERSIONING`
+- `__FEATURE_FUNCTION_MULTI_VERSIONING`
+- `__ARM_FEATURE_FUNCTION_MULTIVERSIONING`
+
+These macros, if defined, indicate that the compiler supports FMV and that the FMV-specific attributes (`__attribute__((target_version("name")))` and `__attribute__((target_clones("name",...)))`) can be used in the code.
+
+#### Example Usage
+
+Before using FMV-specific attributes in your code, check if the compiler supports FMV by checking the relevant macro:
+
+```c
+#if defined(__HAVE_FEATURE_MULTI_VERSIONING) || defined(__FEATURE_FUNCTION_MULTI_VERSIONING) || defined(__ARM_FEATURE_FUNCTION_MULTIVERSIONING)
+// FMV is supported by the compiler
+__attribute__((target_clones("arch1", "arch2")))
+void optimized_function() {
+    // Optimized implementation
+}
+#else
+// FMV is not supported by the compiler
+void optimized_function() {
+    // Standard implementation
+}
+#endif
+```
+
+In this example, the `optimized_function` is defined with FMV-specific attributes if FMV is supported. Otherwise, a standard implementation of the function is provided.
 
 ### Disabling Function Multi Versioning
 
